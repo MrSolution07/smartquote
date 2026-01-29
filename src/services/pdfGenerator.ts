@@ -18,21 +18,23 @@ export async function generatePDF(document: Document): Promise<void> {
 
   // ========== HEADER SECTION ==========
   
-  // Add logo if provided
+  // Title - QUOTE or INVOICE (Left side)
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  const title = type === 'invoice' ? 'INVOICE' : 'QUOTE';
+  doc.text(title, margin, yPosition);
+
+  // Add logo on RIGHT side if provided
   if (document.logo) {
     try {
-      doc.addImage(document.logo, 'PNG', margin, yPosition, 40, 20);
-      yPosition += 25;
+      const logoWidth = 40;
+      const logoHeight = 20;
+      doc.addImage(document.logo, 'PNG', pageWidth - margin - logoWidth, yPosition - 15, logoWidth, logoHeight);
     } catch (error) {
       console.error('Failed to add logo to PDF:', error);
     }
   }
 
-  // Title - QUOTE or INVOICE
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  const title = type === 'invoice' ? 'INVOICE' : 'QUOTE';
-  doc.text(title, margin, yPosition);
   yPosition += 8;
 
   // Left Column: NUMBER and REFERENCE
@@ -81,7 +83,7 @@ export async function generatePDF(document: Document): Promise<void> {
   }
 
   doc.setFont('helvetica', 'bold');
-  doc.text('OVERALL DISCOUNT %:', rightCol, rightY);
+  doc.text('OVERALL DISCOUNT:', rightCol, rightY);
   doc.setFont('helvetica', 'normal');
   const discountPercent = document.discountType === 'percentage' ? document.discount : 0;
   doc.text(`${discountPercent.toFixed(2)}%`, rightCol + 35, rightY);
@@ -186,13 +188,17 @@ export async function generatePDF(document: Document): Promise<void> {
     theme: 'plain',
     styles: {
       fontSize: 8,
-      cellPadding: 2,
+      cellPadding: 3,
+      lineColor: [200, 200, 200],
+      lineWidth: 0.5,
     },
     headStyles: {
-      fillColor: [255, 255, 255],
-      textColor: [0, 0, 0],
+      fillColor: [240, 240, 240], // Light grey background
+      textColor: [60, 60, 60], // Dark grey text
       fontStyle: 'bold',
       halign: 'left',
+      lineColor: [150, 150, 150], // Grey border
+      lineWidth: 0.75,
     },
     columnStyles: {
       0: { cellWidth: 60, halign: 'left' },
@@ -256,25 +262,38 @@ export async function generatePDF(document: Document): Promise<void> {
   yPosition += 4;
 
   doc.setFont('helvetica', 'normal');
-  const bankingLeft = margin;
-  const bankingRight = pageWidth / 2;
 
-  doc.text(`Name: ${businessProfile.companyName}`, bankingLeft, yPosition);
-  if (businessProfile.bankName) {
-    doc.text(`Bank Name: ${businessProfile.bankName}`, bankingRight, yPosition);
-  }
+  // Stacked format (single column)
+  doc.text(`Name: ${businessProfile.companyName}`, margin, yPosition);
   yPosition += 4;
+
+  if (businessProfile.bankName) {
+    doc.text(`Bank Name: ${businessProfile.bankName}`, margin, yPosition);
+    yPosition += 4;
+  }
 
   if (businessProfile.accountNumber) {
-    doc.text(`Account Number: ${businessProfile.accountNumber}`, bankingLeft, yPosition);
+    doc.text(`Account Number: ${businessProfile.accountNumber}`, margin, yPosition);
+    yPosition += 4;
   }
+
+  if (businessProfile.branchCode) {
+    doc.text(`Branch Code: ${businessProfile.branchCode}`, margin, yPosition);
+    yPosition += 4;
+  }
+
+  if (businessProfile.swiftCode) {
+    doc.text(`Swift Code: ${businessProfile.swiftCode}`, margin, yPosition);
+    yPosition += 4;
+  }
+
   if (businessProfile.accountType) {
-    doc.text(`Account Type: ${businessProfile.accountType}`, bankingRight, yPosition);
+    doc.text(`Account Type: ${businessProfile.accountType}`, margin, yPosition);
+    yPosition += 4;
   }
-  yPosition += 4;
 
   if (businessProfile.companyRegistration) {
-    doc.text(`Company Registration Number: ${businessProfile.companyRegistration}`, bankingLeft, yPosition);
+    doc.text(`Company Registration Number: ${businessProfile.companyRegistration}`, margin, yPosition);
     yPosition += 5;
   }
 

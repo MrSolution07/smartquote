@@ -13,6 +13,8 @@ export interface BusinessProfile {
   accountNumber?: string;
   accountType?: string;
   routingNumber?: string;
+  branchCode?: string;
+  swiftCode?: string;
   taxId?: string;
   vatNumber?: string;
   companyRegistration?: string;

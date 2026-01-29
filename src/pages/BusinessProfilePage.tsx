@@ -254,14 +254,27 @@ export default function BusinessProfilePage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Routing Number (Optional)
+                  Branch Code
                 </label>
                 <input
                   type="text"
-                  value={formData.routingNumber || ''}
-                  onChange={(e) => setFormData({ ...formData, routingNumber: e.target.value })}
+                  value={formData.branchCode || ''}
+                  onChange={(e) => setFormData({ ...formData, branchCode: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="123456789"
+                  placeholder="250655"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Swift Code
+                </label>
+                <input
+                  type="text"
+                  value={formData.swiftCode || ''}
+                  onChange={(e) => setFormData({ ...formData, swiftCode: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="FIRNZAJJ"
                 />
               </div>
             </div>

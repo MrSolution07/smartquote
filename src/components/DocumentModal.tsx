@@ -647,15 +647,13 @@ export default function DocumentModal({ isOpen, onClose, type }: DocumentModalPr
                 {businessProfile?.bankName && (
                   <div className="border-t border-gray-300 pt-4 text-sm">
                     <p className="font-bold mb-2">Banking Details</p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p>Name: {businessProfile.companyName}</p>
-                        {businessProfile.accountNumber && <p>Account Number: {businessProfile.accountNumber}</p>}
-                      </div>
-                      <div>
-                        <p>Bank Name: {businessProfile.bankName}</p>
-                        {businessProfile.accountType && <p>Account Type: {businessProfile.accountType}</p>}
-                      </div>
+                    <div className="space-y-1">
+                      <p>Name: {businessProfile.companyName}</p>
+                      <p>Bank Name: {businessProfile.bankName}</p>
+                      {businessProfile.accountNumber && <p>Account Number: {businessProfile.accountNumber}</p>}
+                      {businessProfile.branchCode && <p>Branch Code: {businessProfile.branchCode}</p>}
+                      {businessProfile.swiftCode && <p>Swift Code: {businessProfile.swiftCode}</p>}
+                      {businessProfile.accountType && <p>Account Type: {businessProfile.accountType}</p>}
                     </div>
                     {businessProfile.companyRegistration && (
                       <p className="mt-2">Company Registration Number: {businessProfile.companyRegistration}</p>
