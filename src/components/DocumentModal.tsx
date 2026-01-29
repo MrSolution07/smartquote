@@ -159,6 +159,7 @@ export default function DocumentModal({ isOpen, onClose, type }: DocumentModalPr
       issueDate: formData.issueDate,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      logo: logo || undefined, // Include the logo!
     };
 
     try {

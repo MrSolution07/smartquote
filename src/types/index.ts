@@ -128,6 +128,7 @@ export interface Document {
   issueDate: string;
   aiRecommendation?: AIRecommendation;
   teamMembers?: TeamMember[];
+  logo?: string; // Base64 encoded logo image
   createdAt: string;
   updatedAt: string;
 }

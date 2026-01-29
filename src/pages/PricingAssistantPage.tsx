@@ -89,17 +89,17 @@ export default function PricingAssistantPage() {
         <div className="flex items-start">
           <Sparkles className="h-6 w-6 text-yellow-600 mr-3 mt-1" />
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">🎯 Feature-Based Pricing Coming Soon!</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Feature-Based Pricing Coming Soon!</h3>
             <p className="text-sm text-gray-700 mb-2">
               Price by VALUE, not hours! Instead of "160 hours × R650/hr", get pricing like:
             </p>
             <ul className="text-sm text-gray-600 space-y-1 ml-4">
-              <li>• User Authentication: R15,000</li>
-              <li>• Payment Gateway: R80,000</li>
-              <li>• Admin Dashboard: R45,000</li>
+              <li>• User Authentication: R5,000</li>
+              <li>• Payment Gateway: R8,000</li>
+              <li>• Admin Dashboard: R20,000</li>
             </ul>
             <p className="text-xs text-yellow-800 mt-3 font-semibold">
-              📖 See FEATURE_BASED_PRICING.md for the full guide!
+              See FEATURE_BASED_PRICING.md for the full guide! (it's not functional yet)
             </p>
           </div>
         </div>

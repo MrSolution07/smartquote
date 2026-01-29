@@ -1,5 +1,7 @@
 # 🎯 Feature-Based Pricing - MUCH BETTER Than Hourly!
 
+// please read it's not ywt functional but it should work like this 
+
 ## ❌ **The Problem with Hourly Pricing:**
 
 ```

@@ -118,7 +118,7 @@ REQUIREMENTS:
 6. Total = sum of all feature prices
 
 ` : `
-⏱️ HOURLY RATE PRICING MODEL (Traditional cost-based)
+HOURLY RATE PRICING MODEL (Traditional cost-based)
 
 PROJECT DETAILS:
 - Client Category: ${input.clientCategory} (affects budget expectations)

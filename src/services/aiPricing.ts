@@ -8,7 +8,7 @@ import type {
 } from '../types';
 import { getAIPricingAnalysis } from './aiService';
 
-// Base rates by role (per hour in ZAR - South African market rates)
+// this is just a mock data for the time being but this should be either entered by the user or by the ai
 const BASE_RATES: Record<RoleType, { junior: number; mid: number; senior: number; lead: number }> = {
   developer: { junior: 350, mid: 650, senior: 1000, lead: 1400 },
   designer: { junior: 300, mid: 550, senior: 850, lead: 1200 },
@@ -19,14 +19,14 @@ const BASE_RATES: Record<RoleType, { junior: number; mid: number; senior: number
   other: { junior: 350, mid: 550, senior: 850, lead: 1200 },
 };
 
-// Complexity multipliers
+// Complexity multipliers, again this is just a mock data for the time being but this should be either entered by the user or by the ai
 const COMPLEXITY_MULTIPLIERS = {
   low: 0.8,
   medium: 1.0,
   high: 1.3,
 };
 
-// Project size multipliers
+// Project size multipliers, again this is just a mock data for the time being but this should be either entered by the user or by the ai
 const SIZE_MULTIPLIERS = {
   small: 0.9,
   medium: 1.0,
@@ -79,10 +79,10 @@ export async function generatePricingRecommendation(
     // Build comprehensive reasoning
     const enhancedReasoning = `${aiAnalysis.reasoning}
 
-📊 MARKET INSIGHTS:
+MARKET INSIGHTS:
 ${aiAnalysis.marketInsights}
 
-💡 RECOMMENDATION:
+RECOMMENDATION:
 This pricing is based on ${aiConfig?.enabled ? 'AI-powered analysis using real-time market data' : 'algorithmic analysis'}. The recommendation includes a ${aiAnalysis.profitMarginRecommendation}% profit margin which is industry-standard for ${input.projectSize} ${input.clientCategory} projects.`;
     
     return {
