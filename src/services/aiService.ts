@@ -65,8 +65,6 @@ export async function getAIPricingAnalysis(
 
 function buildPrompt(input: ProjectInput): string {
   const isFeatureBased = input.description?.includes('Feature-based pricing');
-  const featureCount = isFeatureBased ? 
-    (input.description?.match(/Total features: (\d+)/)?.[1] || '0') : '0';
   
   return `You are an expert pricing consultant for the SOUTH AFRICAN market. Analyze this project and provide detailed pricing recommendations in SOUTH AFRICAN RAND (ZAR/R).
 

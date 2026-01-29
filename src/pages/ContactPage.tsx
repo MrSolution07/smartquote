@@ -29,10 +29,10 @@ export default function ContactPage() {
                   Send us an email and we'll get back to you as soon as possible.
                 </p>
                 <a
-                  href="mailto:support@smartquote.com"
+                  href="mailto:"
                   className="text-primary-600 hover:text-primary-700 font-medium"
                 >
-                  support@smartquote.com
+                  voicimwima@mail.com (it doesn't work yet)
                 </a>
               </div>
             </div>
@@ -50,8 +50,8 @@ export default function ContactPage() {
                   Found a bug or have a feature request? Open an issue on GitHub.
                 </p>
                 <a
-                  href="https://github.com/yourusername/smartquote"
-                  target="_blank"
+                  href="https://github.com/MrSolution07/smartquote"
+                  target="noreferrer"
                   rel="noopener noreferrer"
                   className="text-primary-600 hover:text-primary-700 font-medium"
                 >

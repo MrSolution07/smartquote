@@ -17,18 +17,24 @@ export default function PricingAssistantPage() {
     description: '',
   });
 
-  const [features, setFeatures] = useState<string[]>(['']);
-  const [pricingModel, setPricingModel] = useState<'feature-based' | 'hourly'>('feature-based');
+  // Feature-based pricing - coming soon!
+  const [features] = useState<string[]>(['']);
+  const [pricingModel] = useState<'feature-based' | 'hourly'>('hourly'); // Temporarily disabled
   const [showResults, setShowResults] = useState(false);
 
-  // Debug AI configuration
-  console.log('AI Config:', aiConfig);
-  console.log('AI Enabled:', aiConfig?.enabled);
-  console.log('API Key Present:', aiConfig?.apiKey ? 'Yes' : 'No');
-
   const { data: recommendation, isLoading, refetch } = useQuery({
-    queryKey: ['pricing-recommendation', projectInput, aiConfig],
-    queryFn: () => generatePricingRecommendation(projectInput, aiConfig),
+    queryKey: ['pricing-recommendation', projectInput, aiConfig, pricingModel, features],
+    queryFn: () => {
+      const enhancedInput = {
+        ...projectInput,
+        description: pricingModel === 'feature-based' 
+          ? `Feature-based pricing for: ${features.filter(f => f.trim()).join(', ')}. Total features: ${features.filter(f => f.trim()).length}`
+          : projectInput.description,
+        pricingModel,
+        features: features.filter(f => f.trim()),
+      };
+      return generatePricingRecommendation(enhancedInput, aiConfig);
+    },
     enabled: false,
   });
 
@@ -37,6 +43,7 @@ export default function PricingAssistantPage() {
     setShowResults(true);
     refetch();
   };
+
 
   const handleRoleToggle = (role: RoleType) => {
     if (projectInput.roles.includes(role)) {
@@ -71,20 +78,28 @@ export default function PricingAssistantPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">AI Pricing Assistant</h1>
             <p className="mt-1 text-gray-600">
-              Get intelligent pricing recommendations based on your project details
+              Get intelligent pricing based on features (value) or traditional hourly rates
             </p>
           </div>
         </div>
       </div>
 
-      {/* Info Banner */}
-      <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+      {/* Coming Soon: Feature-Based Pricing */}
+      <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg p-6 mb-6">
         <div className="flex items-start">
-          <Info className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-blue-900">
-            <p>
-              The AI assistant analyzes project complexity, team composition, client type, and market
-              rates to suggest competitive pricing with appropriate profit margins.
+          <Sparkles className="h-6 w-6 text-yellow-600 mr-3 mt-1" />
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">🎯 Feature-Based Pricing Coming Soon!</h3>
+            <p className="text-sm text-gray-700 mb-2">
+              Price by VALUE, not hours! Instead of "160 hours × R650/hr", get pricing like:
+            </p>
+            <ul className="text-sm text-gray-600 space-y-1 ml-4">
+              <li>• User Authentication: R15,000</li>
+              <li>• Payment Gateway: R80,000</li>
+              <li>• Admin Dashboard: R45,000</li>
+            </ul>
+            <p className="text-xs text-yellow-800 mt-3 font-semibold">
+              📖 See FEATURE_BASED_PRICING.md for the full guide!
             </p>
           </div>
         </div>

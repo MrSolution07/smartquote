@@ -140,4 +140,6 @@ export interface ProjectInput {
   teamSize: number;
   roles: RoleType[];
   description?: string;
+  pricingModel?: 'feature-based' | 'hourly';
+  features?: string[];
 }

@@ -51,7 +51,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/smartquote.git
+git clone https://github.com/MrSolution07/smartquote.git
 cd smartquote
 
 # Install dependencies
@@ -287,7 +287,7 @@ VITE_AI_PROVIDER=groq
 - Visit the **Contact Us** page in the app
 - Check the FAQ section
 - Email: support@smartquote.com
-- GitHub Issues: [Report a bug](https://github.com/yourusername/smartquote/issues)
+- GitHub Issues: [Report a bug](https://github.com/MrSolution07/smartquote/issues)
 
 ### Common Questions
 
