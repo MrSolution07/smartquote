@@ -8,15 +8,15 @@ import type {
 } from '../types';
 import { getAIPricingAnalysis } from './aiService';
 
-// Base rates by role (per hour in USD)
+// Base rates by role (per hour in ZAR - South African market rates)
 const BASE_RATES: Record<RoleType, { junior: number; mid: number; senior: number; lead: number }> = {
-  developer: { junior: 40, mid: 70, senior: 100, lead: 130 },
-  designer: { junior: 35, mid: 60, senior: 90, lead: 115 },
-  manager: { junior: 50, mid: 75, senior: 105, lead: 140 },
-  consultant: { junior: 60, mid: 90, senior: 130, lead: 170 },
-  qa: { junior: 30, mid: 50, senior: 75, lead: 95 },
-  devops: { junior: 50, mid: 80, senior: 115, lead: 150 },
-  other: { junior: 40, mid: 65, senior: 90, lead: 120 },
+  developer: { junior: 350, mid: 650, senior: 1000, lead: 1400 },
+  designer: { junior: 300, mid: 550, senior: 850, lead: 1200 },
+  manager: { junior: 450, mid: 750, senior: 1100, lead: 1500 },
+  consultant: { junior: 600, mid: 1000, senior: 1400, lead: 1800 },
+  qa: { junior: 250, mid: 450, senior: 650, lead: 900 },
+  devops: { junior: 450, mid: 700, senior: 1100, lead: 1500 },
+  other: { junior: 350, mid: 550, senior: 850, lead: 1200 },
 };
 
 // Complexity multipliers

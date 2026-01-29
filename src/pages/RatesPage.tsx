@@ -13,7 +13,7 @@ export default function RatesPage() {
     name: '',
     role: 'developer',
     hourlyRate: 0,
-    currency: 'USD',
+    currency: 'ZAR',
     description: '',
   });
 
@@ -68,7 +68,7 @@ export default function RatesPage() {
       name: '',
       role: 'developer',
       hourlyRate: 0,
-      currency: 'USD',
+      currency: 'ZAR',
       description: '',
     });
   };
@@ -134,7 +134,7 @@ export default function RatesPage() {
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
                       <p className="text-lg font-bold text-gray-900">
-                        ${preset.hourlyRate.toFixed(2)}
+                        R{preset.hourlyRate.toFixed(2)}
                       </p>
                       <p className="text-xs text-gray-500">per hour</p>
                     </div>

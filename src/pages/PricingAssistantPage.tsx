@@ -16,6 +16,9 @@ export default function PricingAssistantPage() {
     roles: ['developer', 'designer'],
     description: '',
   });
+
+  const [features, setFeatures] = useState<string[]>(['']);
+  const [pricingModel, setPricingModel] = useState<'feature-based' | 'hourly'>('feature-based');
   const [showResults, setShowResults] = useState(false);
 
   // Debug AI configuration
@@ -265,7 +268,7 @@ export default function PricingAssistantPage() {
                       Recommended Total Price
                     </p>
                     <p className="text-4xl font-bold text-gray-900">
-                      ${recommendation.totalPrice.toLocaleString()}
+                      R{recommendation.totalPrice.toLocaleString()}
                     </p>
                   </div>
                   <div className="bg-primary-200 rounded-lg p-4">
@@ -293,7 +296,7 @@ export default function PricingAssistantPage() {
                         <p className="text-sm font-medium text-gray-900">{item.description}</p>
                       </div>
                       <p className="text-sm font-semibold text-gray-900">
-                        ${item.total.toFixed(2)}
+                        R{item.total.toFixed(2)}
                       </p>
                     </div>
                   ))}
@@ -316,12 +319,12 @@ export default function PricingAssistantPage() {
                           {member.level} {member.role}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {member.estimatedHours}h @ ${member.hourlyRate}/hr
+                          {member.estimatedHours}h @ R{member.hourlyRate}/hr
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-gray-900">
-                          ${(member.estimatedHours * member.hourlyRate).toFixed(2)}
+                          R{(member.estimatedHours * member.hourlyRate).toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500">
                           {member.contributionPercentage}% contribution

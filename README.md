@@ -154,8 +154,7 @@ smartquote/
 The app comes with a pre-configured Groq API key in `.env`:
 
 ```bash
-VITE_GROQ_API_KEY=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
-VITE_AI_PROVIDER=groq
+
 ```
 
 ### Want to use your own API key?

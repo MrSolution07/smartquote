@@ -64,9 +64,65 @@ export async function getAIPricingAnalysis(
 }
 
 function buildPrompt(input: ProjectInput): string {
+  const isFeatureBased = input.description?.includes('Feature-based pricing');
+  const featureCount = isFeatureBased ? 
+    (input.description?.match(/Total features: (\d+)/)?.[1] || '0') : '0';
+  
   return `You are an expert pricing consultant for the SOUTH AFRICAN market. Analyze this project and provide detailed pricing recommendations in SOUTH AFRICAN RAND (ZAR/R).
 
-CRITICAL: ACTUALLY USE THESE PROJECT DETAILS IN YOUR CALCULATIONS:
+${isFeatureBased ? `
+🎯 FEATURE-BASED PRICING MODEL (Value-based, NOT hourly!)
+
+PROJECT FEATURES:
+${input.description}
+
+CRITICAL: Price EACH FEATURE based on its VALUE and COMPLEXITY, not developer hours!
+
+SOUTH AFRICAN FEATURE PRICING GUIDELINES:
+Simple Features (R8,000 - R25,000 each):
+- User login/registration: R12,000 - R18,000
+- Basic contact form: R8,000 - R12,000
+- Email notifications: R10,000 - R15,000
+- Basic search: R15,000 - R20,000
+
+Medium Features (R25,000 - R60,000 each):
+- User profile management: R30,000 - R45,000
+- File upload system: R35,000 - R50,000
+- Admin dashboard: R40,000 - R60,000
+- Reporting system: R35,000 - R55,000
+- API integration: R30,000 - R50,000
+
+Complex Features (R60,000 - R150,000 each):
+- Payment gateway integration: R80,000 - R120,000
+- Real-time chat system: R90,000 - R130,000
+- Advanced analytics: R70,000 - R110,000
+- Multi-user collaboration: R85,000 - R140,000
+- E-commerce system: R100,000 - R150,000
+
+Very Complex Features (R150,000+ each):
+- Custom CRM system: R180,000 - R300,000
+- AI/ML integration: R200,000 - R400,000
+- Video streaming platform: R250,000 - R500,000
+- Blockchain integration: R300,000+
+
+For complexity="${input.complexity}":
+- low: Use SIMPLE feature rates
+- medium: Use MEDIUM feature rates
+- high: Use COMPLEX feature rates
+- very-high: Use VERY COMPLEX feature rates
+
+REQUIREMENTS:
+1. Analyze EACH feature mentioned
+2. Price each feature individually based on SA market value
+3. Consider feature complexity, not just hours
+4. Add 30-40% profit margin
+5. Provide reasoning for each feature's price
+6. Total = sum of all feature prices
+
+` : `
+⏱️ HOURLY RATE PRICING MODEL (Traditional cost-based)
+
+PROJECT DETAILS:
 - Client Category: ${input.clientCategory} (affects budget expectations)
 - Project Size: ${input.projectSize} (affects scope and team size)
 - Complexity Level: ${input.complexity} (VERY IMPORTANT - affects rates and hours!)
@@ -117,18 +173,19 @@ REQUIREMENTS:
 6. Provide breakdown for EACH role in: ${input.roles.join(', ')}
 7. Include realistic South African market insights
 8. Profit margin: 30-40% for SA market
+`}
 
 Respond ONLY with valid JSON:
 {
-  "recommendedPrice": number (in ZAR - MUST reflect the complexity and size!),
-  "reasoning": "Detailed explanation showing HOW you used complexity=${input.complexity}, size=${input.projectSize}, and duration=${input.estimatedDuration} to calculate pricing",
+  "recommendedPrice": number (in ZAR - total project price),
+  "reasoning": "Detailed explanation of ${isFeatureBased ? 'how you priced each feature' : `how you used complexity=${input.complexity}, size=${input.projectSize}, duration=${input.estimatedDuration}`}",
   "costBreakdown": [
     {
-      "role": "role name",
-      "hours": number (based on ${input.estimatedDuration} weeks and complexity),
-      "rate": number (ZAR/hr - adjusted for complexity level),
-      "total": number (hours × rate in ZAR),
-      "justification": "why THIS rate for complexity=${input.complexity}"
+      "role": "${isFeatureBased ? 'feature name (e.g., User Authentication)' : 'role name (e.g., developer)'}",
+      "hours": number (${isFeatureBased ? '0 for feature-based' : `based on ${input.estimatedDuration} weeks`}),
+      "rate": number (${isFeatureBased ? 'price per feature in ZAR' : 'ZAR/hr'}),
+      "total": number (${isFeatureBased ? 'feature price in ZAR' : 'hours × rate'}),
+      "justification": "${isFeatureBased ? 'why this feature costs this much' : 'why this rate/hours'}"
     }
   ],
   "marketInsights": "South African market analysis",
@@ -295,15 +352,15 @@ function parseAIResponse(response: string, input: ProjectInput): AIAnalysisResul
 }
 
 function getFallbackAnalysis(input: ProjectInput): AIAnalysisResult {
-  // Base rates by role (per hour in USD)
+  // Base rates by role (per hour in ZAR - South African market)
   const baseRates: Record<string, number> = {
-    developer: 85,
-    designer: 75,
-    manager: 95,
-    consultant: 125,
-    qa: 65,
-    devops: 105,
-    other: 80,
+    developer: 650,
+    designer: 550,
+    manager: 750,
+    consultant: 1200,
+    qa: 450,
+    devops: 700,
+    other: 500,
   };
 
   // Complexity multipliers
