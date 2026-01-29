@@ -11,6 +11,7 @@ import {
 import { format } from 'date-fns';
 import { useStore } from '../store/useStore';
 import { generatePDF } from '../services/pdfGenerator';
+import { CURRENCIES } from '../utils/currencies';
 import type { Document, LineItem, DocumentType, DocumentStatus } from '../types';
 
 const generateId = () => crypto.randomUUID();
@@ -39,17 +40,20 @@ export default function DocumentEditorPage() {
     type: docType,
     status: 'draft',
     documentNumber: '',
+    reference: '',
+    salesRep: '',
     clientId: '',
     lineItems: [],
     subtotal: 0,
-    taxRate: 0,
+    taxRate: 15,
     taxAmount: 0,
     discount: 0,
     discountType: 'percentage',
     total: 0,
-    currency: businessProfile?.defaultCurrency || '$',
+    currency: businessProfile?.defaultCurrency || 'R',
     notes: '',
     terms: '',
+    paymentTerms: '50% deposit payable before work can commence.',
     dueDate: '',
     issueDate: format(new Date(), 'yyyy-MM-dd'),
   });
@@ -150,6 +154,8 @@ export default function DocumentEditorPage() {
       type: formData.type || docType,
       status: formData.status || 'draft',
       documentNumber: formData.documentNumber || '',
+      reference: formData.reference,
+      salesRep: formData.salesRep,
       clientId: formData.clientId || '',
       client: selectedClient,
       businessProfile: businessProfile,
@@ -160,9 +166,10 @@ export default function DocumentEditorPage() {
       discount: formData.discount || 0,
       discountType: formData.discountType || 'percentage',
       total: formData.total || 0,
-      currency: formData.currency || '$',
+      currency: formData.currency || 'R',
       notes: formData.notes,
       terms: formData.terms,
+      paymentTerms: formData.paymentTerms,
       dueDate: formData.dueDate,
       issueDate: formData.issueDate || format(new Date(), 'yyyy-MM-dd'),
       createdAt: existingDoc?.createdAt || new Date().toISOString(),
@@ -195,6 +202,8 @@ export default function DocumentEditorPage() {
       type: formData.type || docType,
       status: formData.status || 'draft',
       documentNumber: formData.documentNumber || '',
+      reference: formData.reference,
+      salesRep: formData.salesRep,
       clientId: formData.clientId || '',
       client: selectedClient,
       businessProfile: businessProfile,
@@ -205,9 +214,10 @@ export default function DocumentEditorPage() {
       discount: formData.discount || 0,
       discountType: formData.discountType || 'percentage',
       total: formData.total || 0,
-      currency: formData.currency || '$',
+      currency: formData.currency || 'R',
       notes: formData.notes,
       terms: formData.terms,
+      paymentTerms: formData.paymentTerms,
       dueDate: formData.dueDate,
       issueDate: formData.issueDate || format(new Date(), 'yyyy-MM-dd'),
       createdAt: new Date().toISOString(),
@@ -228,6 +238,43 @@ export default function DocumentEditorPage() {
       navigate({ to: '/documents' });
     }
   };
+
+  console.log('About to render, formData:', formData);
+
+  // Early return for debugging
+  if (!businessProfile) {
+    return (
+      <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-yellow-900 mb-2">Business Profile Required</h2>
+          <p className="text-yellow-800 mb-4">Please set up your business profile first.</p>
+          <button
+            onClick={() => navigate({ to: '/business-profile' })}
+            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+          >
+            Go to Business Profile
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (clients.length === 0) {
+    return (
+      <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-yellow-900 mb-2">Clients Required</h2>
+          <p className="text-yellow-800 mb-4">Please add at least one client first.</p>
+          <button
+            onClick={() => navigate({ to: '/clients' })}
+            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+          >
+            Go to Clients
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
@@ -318,6 +365,32 @@ export default function DocumentEditorPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Reference
+                </label>
+                <input
+                  type="text"
+                  value={formData.reference}
+                  onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., Project description"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sales Rep
+                </label>
+                <input
+                  type="text"
+                  value={formData.salesRep}
+                  onChange={(e) => setFormData({ ...formData, salesRep: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="Sales representative name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Issue Date *
                 </label>
                 <input
@@ -339,6 +412,23 @@ export default function DocumentEditorPage() {
                   onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Currency
+                </label>
+                <select
+                  value={formData.currency}
+                  onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                >
+                  {CURRENCIES.map((currency) => (
+                    <option key={currency.code} value={currency.symbol}>
+                      {currency.symbol} - {currency.name} ({currency.code})
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -442,6 +532,18 @@ export default function DocumentEditorPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Payment Terms
+                </label>
+                <textarea
+                  value={formData.paymentTerms}
+                  onChange={(e) => setFormData({ ...formData, paymentTerms: e.target.value })}
+                  rows={2}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="e.g., 50% deposit payable before work can commence."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Terms & Conditions
                 </label>
                 <textarea
@@ -449,7 +551,7 @@ export default function DocumentEditorPage() {
                   onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="Payment terms, conditions, etc..."
+                  placeholder="Additional terms and conditions..."
                 />
               </div>
             </div>
@@ -492,7 +594,7 @@ export default function DocumentEditorPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tax Rate (%)
+                  VAT Rate (%)
                 </label>
                 <input
                   type="number"
@@ -503,6 +605,7 @@ export default function DocumentEditorPage() {
                     setFormData({ ...formData, taxRate: parseFloat(e.target.value) || 0 })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="15"
                 />
               </div>
 

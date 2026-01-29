@@ -11,14 +11,31 @@ export interface BusinessProfile {
   country: string;
   bankName?: string;
   accountNumber?: string;
+  accountType?: string;
   routingNumber?: string;
   taxId?: string;
   vatNumber?: string;
+  companyRegistration?: string;
+  postalAddress?: string;
+  physicalAddress?: string;
+  salesRep?: string;
   defaultCurrency: string;
   invoicePrefix: string;
   invoiceNumberStart: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Currency {
+  code: string;
+  symbol: string;
+  name: string;
+}
+
+export interface AIConfig {
+  provider: 'groq' | 'huggingface' | 'together' | 'openrouter';
+  apiKey: string;
+  enabled: boolean;
 }
 
 export type ClientCategory = 'individual' | 'small-business' | 'enterprise' | 'non-profit';
@@ -36,6 +53,9 @@ export interface Client {
   country?: string;
   category: ClientCategory;
   notes?: string;
+  vatNumber?: string;
+  physicalAddress?: string;
+  postalAddress?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -88,6 +108,8 @@ export interface Document {
   type: DocumentType;
   status: DocumentStatus;
   documentNumber: string;
+  reference?: string;
+  salesRep?: string;
   clientId: string;
   client: Client;
   businessProfile: BusinessProfile;
@@ -101,6 +123,7 @@ export interface Document {
   currency: string;
   notes?: string;
   terms?: string;
+  paymentTerms?: string;
   dueDate?: string;
   issueDate: string;
   aiRecommendation?: AIRecommendation;

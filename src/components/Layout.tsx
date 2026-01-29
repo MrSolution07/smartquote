@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
 import { 
   LayoutDashboard, 
@@ -7,6 +7,7 @@ import {
   DollarSign, 
   FileText, 
   Sparkles,
+  MessageSquare,
   Menu,
   X 
 } from 'lucide-react';
@@ -18,11 +19,12 @@ interface LayoutProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'AI Pricing Assistant', href: '/pricing-assistant', icon: Sparkles },
   { name: 'Business Profile', href: '/business-profile', icon: Building2 },
   { name: 'Clients', href: '/clients', icon: Users },
   { name: 'Rate Presets', href: '/rates', icon: DollarSign },
   { name: 'Documents', href: '/documents', icon: FileText },
-  { name: 'AI Pricing Assistant', href: '/pricing-assistant', icon: Sparkles },
+  { name: 'Contact Us', href: '/contact', icon: MessageSquare },
 ];
 
 export default function Layout({ children }: LayoutProps) {

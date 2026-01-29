@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as PricingAssistantRouteImport } from './routes/pricing-assistant'
 import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as BusinessProfileRouteImport } from './routes/business-profile'
 import { Route as IndexRouteImport } from './routes/index'
@@ -30,6 +31,11 @@ const PricingAssistantRoute = PricingAssistantRouteImport.update({
 const DocumentsRoute = DocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientsRoute = ClientsRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/business-profile': typeof BusinessProfileRoute
   '/clients': typeof ClientsRoute
+  '/contact': typeof ContactRoute
   '/documents': typeof DocumentsRouteWithChildren
   '/pricing-assistant': typeof PricingAssistantRoute
   '/rates': typeof RatesRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/business-profile': typeof BusinessProfileRoute
   '/clients': typeof ClientsRoute
+  '/contact': typeof ContactRoute
   '/documents': typeof DocumentsRouteWithChildren
   '/pricing-assistant': typeof PricingAssistantRoute
   '/rates': typeof RatesRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/business-profile': typeof BusinessProfileRoute
   '/clients': typeof ClientsRoute
+  '/contact': typeof ContactRoute
   '/documents': typeof DocumentsRouteWithChildren
   '/pricing-assistant': typeof PricingAssistantRoute
   '/rates': typeof RatesRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/business-profile'
     | '/clients'
+    | '/contact'
     | '/documents'
     | '/pricing-assistant'
     | '/rates'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/business-profile'
     | '/clients'
+    | '/contact'
     | '/documents'
     | '/pricing-assistant'
     | '/rates'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/business-profile'
     | '/clients'
+    | '/contact'
     | '/documents'
     | '/pricing-assistant'
     | '/rates'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BusinessProfileRoute: typeof BusinessProfileRoute
   ClientsRoute: typeof ClientsRoute
+  ContactRoute: typeof ContactRoute
   DocumentsRoute: typeof DocumentsRouteWithChildren
   PricingAssistantRoute: typeof PricingAssistantRoute
   RatesRoute: typeof RatesRoute
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/documents'
       fullPath: '/documents'
       preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clients': {
@@ -190,6 +210,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BusinessProfileRoute: BusinessProfileRoute,
   ClientsRoute: ClientsRoute,
+  ContactRoute: ContactRoute,
   DocumentsRoute: DocumentsRouteWithChildren,
   PricingAssistantRoute: PricingAssistantRoute,
   RatesRoute: RatesRoute,

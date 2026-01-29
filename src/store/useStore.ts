@@ -4,7 +4,8 @@ import type {
   BusinessProfile, 
   Client, 
   RatePreset, 
-  Document 
+  Document,
+  AIConfig
 } from '../types';
 
 interface AppState {
@@ -32,6 +33,10 @@ interface AppState {
   deleteDocument: (id: string) => void;
   getDocumentById: (id: string) => Document | undefined;
   getNextInvoiceNumber: () => string;
+  
+  // AI Configuration
+  aiConfig: AIConfig | null;
+  setAIConfig: (config: AIConfig) => void;
   
   // UI State
   sidebarOpen: boolean;
@@ -152,6 +157,10 @@ export const useStore = create<AppState>()(
         const nextNumber = start + invoices.length;
         return `${prefix}-${nextNumber}`;
       },
+      
+      // AI Configuration
+      aiConfig: null,
+      setAIConfig: (config) => set({ aiConfig: config }),
       
       // UI State
       sidebarOpen: true,

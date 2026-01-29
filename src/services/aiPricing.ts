@@ -3,8 +3,10 @@ import type {
   AIRecommendation, 
   LineItem, 
   TeamMember, 
-  RoleType 
+  RoleType,
+  AIConfig
 } from '../types';
+import { getAIPricingAnalysis } from './aiService';
 
 // Base rates by role (per hour in USD)
 const BASE_RATES: Record<RoleType, { junior: number; mid: number; senior: number; lead: number }> = {
@@ -44,23 +46,115 @@ const generateId = () => crypto.randomUUID();
 
 /**
  * AI-powered pricing recommendation engine
- * This simulates an AI service that provides intelligent pricing suggestions
- * In a production app, this would call an actual AI API (OpenAI, Claude, etc.)
+ * Uses real AI APIs (Groq, HuggingFace, etc.) for intelligent pricing suggestions
+ * Falls back to algorithmic pricing if AI is not configured or fails
  */
 export async function generatePricingRecommendation(
-  input: ProjectInput
+  input: ProjectInput,
+  aiConfig: AIConfig | null = null
 ): Promise<AIRecommendation> {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  try {
+    // Try to get AI-powered analysis
+    const aiAnalysis = await getAIPricingAnalysis(input, aiConfig);
+    
+    // Convert AI analysis to our format
+    const teamSuggestions = convertAIBreakdownToTeamSuggestions(
+      aiAnalysis.costBreakdown
+    );
+    
+    const breakdown = convertAIBreakdownToLineItems(aiAnalysis.costBreakdown);
+    
+    // Add project management fee for larger projects
+    if (input.projectSize === 'large' || input.projectSize === 'enterprise') {
+      const pmFee = aiAnalysis.recommendedPrice * 0.1;
+      breakdown.push({
+        id: generateId(),
+        description: 'Project Management & Coordination',
+        quantity: 1,
+        unitPrice: Math.round(pmFee * 100) / 100,
+        total: Math.round(pmFee * 100) / 100,
+      });
+    }
+    
+    // Build comprehensive reasoning
+    const enhancedReasoning = `${aiAnalysis.reasoning}
 
+📊 MARKET INSIGHTS:
+${aiAnalysis.marketInsights}
+
+💡 RECOMMENDATION:
+This pricing is based on ${aiConfig?.enabled ? 'AI-powered analysis using real-time market data' : 'algorithmic analysis'}. The recommendation includes a ${aiAnalysis.profitMarginRecommendation}% profit margin which is industry-standard for ${input.projectSize} ${input.clientCategory} projects.`;
+    
+    return {
+      totalPrice: Math.round(aiAnalysis.recommendedPrice * 100) / 100,
+      breakdown,
+      profitMargin: aiAnalysis.profitMarginRecommendation,
+      reasoning: enhancedReasoning,
+      teamSuggestions,
+      confidence: aiAnalysis.confidence,
+    };
+  } catch (error) {
+    console.error('AI pricing failed, using fallback:', error);
+    // Fallback to original algorithmic method
+    return generateAlgorithmicPricing(input);
+  }
+}
+
+function convertAIBreakdownToTeamSuggestions(
+  costBreakdown: any[]
+): TeamMember[] {
+  return costBreakdown.map((item) => {
+    // Determine level based on rate
+    const rate = item.rate;
+    let level: 'junior' | 'mid' | 'senior' | 'lead' = 'mid';
+    
+    if (rate < 60) level = 'junior';
+    else if (rate < 90) level = 'mid';
+    else if (rate < 120) level = 'senior';
+    else level = 'lead';
+    
+    // Map role name to RoleType
+    const roleName = item.role.toLowerCase();
+    let role: RoleType = 'other';
+    
+    if (roleName.includes('develop')) role = 'developer';
+    else if (roleName.includes('design')) role = 'designer';
+    else if (roleName.includes('manag')) role = 'manager';
+    else if (roleName.includes('consul')) role = 'consultant';
+    else if (roleName.includes('qa') || roleName.includes('test')) role = 'qa';
+    else if (roleName.includes('devops')) role = 'devops';
+    
+    return {
+      id: generateId(),
+      role,
+      estimatedHours: item.hours,
+      hourlyRate: item.rate,
+      contributionPercentage: 0, // Will be calculated below
+      level,
+    };
+  });
+}
+
+function convertAIBreakdownToLineItems(costBreakdown: any[]): LineItem[] {
+  return costBreakdown.map((item) => ({
+    id: generateId(),
+    description: `${item.role} Services (${item.hours} hours) - ${item.justification}`,
+    quantity: item.hours,
+    unitPrice: item.rate,
+    total: item.total,
+  }));
+}
+
+/**
+ * Fallback algorithmic pricing when AI is not available
+ */
+function generateAlgorithmicPricing(input: ProjectInput): AIRecommendation {
   const {
     clientCategory,
     projectSize,
-    complexity,
     estimatedDuration,
     teamSize,
     roles,
-    description,
   } = input;
 
   // Calculate base hours per week per person
@@ -73,7 +167,7 @@ export async function generatePricingRecommendation(
     roles,
     teamSize,
     totalHours,
-    complexity
+    input.complexity
   );
 
   // Calculate labor costs
@@ -83,7 +177,7 @@ export async function generatePricingRecommendation(
   );
 
   // Apply multipliers
-  const complexityMultiplier = COMPLEXITY_MULTIPLIERS[complexity];
+  const complexityMultiplier = COMPLEXITY_MULTIPLIERS[input.complexity];
   const sizeMultiplier = SIZE_MULTIPLIERS[projectSize];
   const clientAdjustment = CLIENT_ADJUSTMENTS[clientCategory];
 
@@ -129,15 +223,11 @@ function generateTeamSuggestions(
   const suggestions: TeamMember[] = [];
   const hoursPerMember = totalHours / teamSize;
 
-  // Determine level distribution based on complexity
-  const levelDistribution =
-    complexity === 'high'
-      ? { junior: 0.2, mid: 0.3, senior: 0.3, lead: 0.2 }
-      : complexity === 'medium'
-      ? { junior: 0.3, mid: 0.4, senior: 0.2, lead: 0.1 }
-      : { junior: 0.4, mid: 0.4, senior: 0.15, lead: 0.05 };
-
-  const levels: Array<'junior' | 'mid' | 'senior' | 'lead'> = ['junior', 'mid', 'senior', 'lead'];
+  // Adjust seniority based on complexity
+  const levels: Array<'junior' | 'mid' | 'senior' | 'lead'> = 
+    complexity === 'high' ? ['mid', 'senior', 'senior', 'lead'] :
+    complexity === 'low' ? ['junior', 'junior', 'mid', 'mid'] :
+    ['junior', 'mid', 'senior', 'lead'];
   
   roles.forEach((role, index) => {
     // Distribute levels across team members
@@ -271,7 +361,6 @@ function calculateConfidence(input: ProjectInput, teamSuggestions: TeamMember[])
  * Suggest team compensation based on total project value
  */
 export function calculateTeamCompensation(
-  totalRevenue: number,
   teamMembers: TeamMember[]
 ): TeamMember[] {
   const totalHours = teamMembers.reduce((sum, m) => sum + m.estimatedHours, 0);

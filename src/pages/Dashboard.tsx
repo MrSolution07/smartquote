@@ -3,8 +3,6 @@ import { Link } from '@tanstack/react-router';
 import { 
   FileText, 
   Users, 
-  DollarSign, 
-  TrendingUp,
   Plus,
   Sparkles 
 } from 'lucide-react';
@@ -38,18 +36,18 @@ export default function Dashboard() {
   }, [documents, clients]);
 
   const statCards = [
-    {
-      name: 'Total Revenue',
-      value: `${businessProfile?.defaultCurrency || '$'}${stats.totalRevenue.toFixed(2)}`,
-      icon: DollarSign,
-      color: 'bg-green-500',
-    },
-    {
-      name: 'Pending Amount',
-      value: `${businessProfile?.defaultCurrency || '$'}${stats.pendingAmount.toFixed(2)}`,
-      icon: TrendingUp,
-      color: 'bg-yellow-500',
-    },
+    // {
+    //   name: 'Total Revenue',
+    //   value: `${businessProfile?.defaultCurrency || '$'}${stats.totalRevenue.toFixed(2)}`,
+    //   icon: DollarSign,
+    //   color: 'bg-green-500',
+    // },
+    // {
+    //   name: 'Pending Amount',
+    //   value: `${businessProfile?.defaultCurrency || '$'}${stats.pendingAmount.toFixed(2)}`,
+    //   icon: TrendingUp,
+    //   color: 'bg-yellow-500',
+    // },
     {
       name: 'Total Clients',
       value: stats.totalClients,
@@ -177,7 +175,8 @@ export default function Dashboard() {
             stats.recentDocs.map((doc) => (
               <Link
                 key={doc.id}
-                to={`/documents/${doc.id}`}
+                to="/documents/$documentId"
+                params={{ documentId: doc.id }}
                 className="px-6 py-4 hover:bg-gray-50 flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center space-x-4">

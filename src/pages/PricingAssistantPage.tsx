@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Sparkles, TrendingUp, Users, DollarSign, Info, FileText } from 'lucide-react';
+import { Sparkles, TrendingUp, Users, Info, FileText } from 'lucide-react';
 import { generatePricingRecommendation } from '../services/aiPricing';
 import { useStore } from '../store/useStore';
-import type { ProjectInput, RoleType, AIRecommendation } from '../types';
+import type { ProjectInput, RoleType } from '../types';
 
 export default function PricingAssistantPage() {
-  const { businessProfile } = useStore();
+  const { aiConfig } = useStore();
   const [projectInput, setProjectInput] = useState<ProjectInput>({
     clientCategory: 'small-business',
     projectSize: 'medium',
@@ -18,9 +18,14 @@ export default function PricingAssistantPage() {
   });
   const [showResults, setShowResults] = useState(false);
 
+  // Debug AI configuration
+  console.log('AI Config:', aiConfig);
+  console.log('AI Enabled:', aiConfig?.enabled);
+  console.log('API Key Present:', aiConfig?.apiKey ? 'Yes' : 'No');
+
   const { data: recommendation, isLoading, refetch } = useQuery({
-    queryKey: ['pricing-recommendation', projectInput],
-    queryFn: () => generatePricingRecommendation(projectInput),
+    queryKey: ['pricing-recommendation', projectInput, aiConfig],
+    queryFn: () => generatePricingRecommendation(projectInput, aiConfig),
     enabled: false,
   });
 
@@ -260,8 +265,7 @@ export default function PricingAssistantPage() {
                       Recommended Total Price
                     </p>
                     <p className="text-4xl font-bold text-gray-900">
-                      {businessProfile?.defaultCurrency || '$'}
-                      {recommendation.totalPrice.toLocaleString()}
+                      ${recommendation.totalPrice.toLocaleString()}
                     </p>
                   </div>
                   <div className="bg-primary-200 rounded-lg p-4">
@@ -289,8 +293,7 @@ export default function PricingAssistantPage() {
                         <p className="text-sm font-medium text-gray-900">{item.description}</p>
                       </div>
                       <p className="text-sm font-semibold text-gray-900">
-                        {businessProfile?.defaultCurrency || '$'}
-                        {item.total.toFixed(2)}
+                        ${item.total.toFixed(2)}
                       </p>
                     </div>
                   ))}
@@ -318,8 +321,7 @@ export default function PricingAssistantPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-gray-900">
-                          {businessProfile?.defaultCurrency || '$'}
-                          {(member.estimatedHours * member.hourlyRate).toFixed(2)}
+                          ${(member.estimatedHours * member.hourlyRate).toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500">
                           {member.contributionPercentage}% contribution

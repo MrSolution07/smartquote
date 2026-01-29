@@ -1,39 +1,30 @@
-import { useMemo, useEffect } from 'react';
-import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useMemo, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { FileText, Plus, Eye, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { useStore } from '../store/useStore';
 import { generatePDF } from '../services/pdfGenerator';
+import DocumentModal from '../components/DocumentModal';
 import type { Document, DocumentType } from '../types';
 
 export default function DocumentsPage() {
-  const navigate = useNavigate();
-  const search = useSearch({ from: '/documents' }) as { create?: string };
   const { documents, businessProfile, clients } = useStore();
-
-  // Handle create action from URL search params
-  useEffect(() => {
-    if (search?.create) {
-      handleCreateNew(search.create as DocumentType);
-    }
-  }, [search?.create]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<DocumentType>('invoice');
 
   const handleCreateNew = (type: DocumentType) => {
     if (!businessProfile) {
-      alert('Please set up your business profile first');
-      navigate({ to: '/business-profile' });
+      alert('Please set up your business profile first. Go to Business Profile page.');
       return;
     }
 
     if (clients.length === 0) {
-      alert('Please add at least one client first');
-      navigate({ to: '/clients' });
+      alert('Please add at least one client first. Go to Clients page.');
       return;
     }
 
-    // Create a new document ID and navigate to the editor
-    const newId = 'new-' + type;
-    navigate({ to: `/documents/${newId}` });
+    setModalType(type);
+    setIsModalOpen(true);
   };
 
   const handleExportPDF = async (doc: Document) => {
@@ -99,7 +90,8 @@ export default function DocumentsPage() {
 
       <div className="flex items-center space-x-2 pt-4 border-t border-gray-200">
         <Link
-          to={`/documents/${doc.id}`}
+          to="/documents/$documentId"
+          params={{ documentId: doc.id }}
           className="flex-1 flex items-center justify-center px-4 py-2 bg-primary-100 border-2 border-primary-300 text-gray-900 rounded-lg hover:bg-primary-200 transition-colors font-bold"
         >
           <Eye className="h-4 w-4 mr-2" />
@@ -116,7 +108,14 @@ export default function DocumentsPage() {
   );
 
   return (
-    <div className="p-6 lg:p-8">
+    <>
+      <DocumentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        type={modalType}
+      />
+      
+      <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -214,5 +213,6 @@ export default function DocumentsPage() {
         </div>
       )}
     </div>
+    </>
   );
 }

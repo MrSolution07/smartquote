@@ -5,7 +5,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   flexRender,
-  createColumnHelper,
 } from '@tanstack/react-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Users, Plus, Search, Pencil, Trash2, X } from 'lucide-react';
@@ -148,6 +147,9 @@ export default function ClientsPage() {
         country: formData.country,
         category: formData.category || 'small-business',
         notes: formData.notes,
+        vatNumber: formData.vatNumber,
+        physicalAddress: formData.physicalAddress,
+        postalAddress: formData.postalAddress,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -172,6 +174,9 @@ export default function ClientsPage() {
       country: '',
       category: 'small-business',
       notes: '',
+      vatNumber: '',
+      physicalAddress: '',
+      postalAddress: '',
     });
   };
 
@@ -398,6 +403,45 @@ export default function ClientsPage() {
                     value={formData.country}
                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    VAT Number
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.vatNumber}
+                    onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="4240272452"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Physical Address (if different)
+                  </label>
+                  <textarea
+                    value={formData.physicalAddress}
+                    onChange={(e) => setFormData({ ...formData, physicalAddress: e.target.value })}
+                    rows={2}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="Plot 103 De Kroon Avenue, Jigsaw Office Park"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Postal Address (if different)
+                  </label>
+                  <textarea
+                    value={formData.postalAddress}
+                    onChange={(e) => setFormData({ ...formData, postalAddress: e.target.value })}
+                    rows={2}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="0250 Plot 103 De Kroon Avenue"
                   />
                 </div>
 

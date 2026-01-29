@@ -17,7 +17,7 @@ export default function BusinessProfilePage() {
       state: '',
       zipCode: '',
       country: 'USA',
-      defaultCurrency: '$',
+      defaultCurrency: 'R',
       invoicePrefix: 'INV',
       invoiceNumberStart: 1000,
     }
@@ -48,7 +48,7 @@ export default function BusinessProfilePage() {
       routingNumber: formData.routingNumber,
       taxId: formData.taxId,
       vatNumber: formData.vatNumber,
-      defaultCurrency: formData.defaultCurrency || '$',
+      defaultCurrency: formData.defaultCurrency || 'R',
       invoicePrefix: formData.invoicePrefix || 'INV',
       invoiceNumberStart: formData.invoiceNumberStart || 1000,
       createdAt: businessProfile?.createdAt || new Date().toISOString(),
@@ -241,7 +241,20 @@ export default function BusinessProfilePage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Routing Number
+                  Account Type
+                </label>
+                <input
+                  type="text"
+                  value={formData.accountType || ''}
+                  onChange={(e) => setFormData({ ...formData, accountType: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="Platinum Business Account"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Routing Number (Optional)
                 </label>
                 <input
                   type="text"
@@ -282,7 +295,67 @@ export default function BusinessProfilePage() {
                   value={formData.vatNumber || ''}
                   onChange={(e) => setFormData({ ...formData, vatNumber: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="GB123456789"
+                  placeholder="4710277395"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Company Registration Number
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyRegistration || ''}
+                  onChange={(e) => setFormData({ ...formData, companyRegistration: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="2014/142051/07"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Information */}
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Additional Information
+            </h2>
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Physical Address (if different from main address)
+                </label>
+                <textarea
+                  value={formData.physicalAddress || ''}
+                  onChange={(e) => setFormData({ ...formData, physicalAddress: e.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="1002 Phase 3 Brits, Centurion, South Africa, 1862"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Postal Address (if different from main address)
+                </label>
+                <textarea
+                  value={formData.postalAddress || ''}
+                  onChange={(e) => setFormData({ ...formData, postalAddress: e.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="71 Jasmyn Street, Diepkloof Extension 54, Soweto, 0210"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Default Sales Representative
+                </label>
+                <input
+                  type="text"
+                  value={formData.salesRep || ''}
+                  onChange={(e) => setFormData({ ...formData, salesRep: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="LERATO KHUNOANA"
                 />
               </div>
             </div>
