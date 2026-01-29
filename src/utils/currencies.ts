@@ -1,5 +1,6 @@
 import type { Currency } from '../types';
 
+// add as many as you want but make sure to add the symbol and name and code
 export const CURRENCIES: Currency[] = [
   { code: 'USD', symbol: '$', name: 'US Dollar' },
   { code: 'EUR', symbol: '€', name: 'Euro' },

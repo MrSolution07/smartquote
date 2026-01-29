@@ -4,12 +4,13 @@ import {
   LayoutDashboard, 
   Building2, 
   Users, 
-  DollarSign, 
+  //DollarSign, 
   FileText, 
   Sparkles,
   MessageSquare,
   Menu,
-  X 
+  X,
+  HandCoins
 } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
@@ -22,7 +23,7 @@ const navigation = [
   { name: 'AI Pricing Assistant', href: '/pricing-assistant', icon: Sparkles },
   { name: 'Business Profile', href: '/business-profile', icon: Building2 },
   { name: 'Clients', href: '/clients', icon: Users },
-  { name: 'Rate Presets', href: '/rates', icon: DollarSign },
+  { name: 'Rate Presets', href: '/rates', icon: HandCoins },
   { name: 'Documents', href: '/documents', icon: FileText },
   { name: 'Contact Us', href: '/contact', icon: MessageSquare },
 ];
