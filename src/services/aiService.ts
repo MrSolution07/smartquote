@@ -15,7 +15,7 @@ export interface AIAnalysisResult {
   confidence: number;
 }
 
-/**
+/**g
  * Call Groq AI API for intelligent pricing analysis
  */
 export async function getAIPricingAnalysis(
