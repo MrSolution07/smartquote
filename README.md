@@ -8,6 +8,19 @@
 
 ## ✨ Features
 
+## 🎯 **Main Feature: AI-to-Document Conversion**
+
+The core workflow of SmartQuote is simple yet powerful:
+
+1. **Get AI Recommendations** - The AI analyzes your project details and generates intelligent pricing suggestions with detailed breakdowns
+2. **Convert to Document** - Click the conversion button to instantly transform AI feedback into a professional invoice or quotation
+3. **Customize Before Download** - Modify line items, adjust rates, add discounts, update fields, or change any details to match your needs
+4. **Download PDF** - Generate a professional, South African VAT-compliant document ready to send to your client
+
+**This seamless flow means you can leverage AI insights but maintain full control over the final output.**
+
+---
+
 ### 🤖 **AI-Powered Pricing** (Pre-configured!)
 - **Works out of the box** - No API key setup required
 - Intelligent pricing recommendations using Groq's Llama 3
@@ -67,6 +80,15 @@ bun dev
 
 The app will open at `http://localhost:5173` (or another port if 5173 is in use).
 
+### 💡 How It Works (The Main Flow)
+
+```
+AI Pricing Assistant → Generate Recommendations → Click Convert Button → 
+Edit & Customize Document → Download Professional PDF
+```
+
+**Key Point**: The conversion button is the bridge between AI insights and your final business documents. You get AI-powered pricing intelligence, then full control to modify anything before downloading.
+
 ---
 
 ## 🎯 Getting Started
@@ -82,27 +104,40 @@ The app will open at `http://localhost:5173` (or another port if 5173 is in use)
 - Click "Add Client"
 - Enter client details (name, address, VAT number, etc.)
 
-### 3. **Try AI Pricing** 🤖
-- Navigate to "AI Pricing Assistant" (2nd in menu)
+### 3. **Use the AI-to-Document Workflow** 🤖➡️📄
+
+**Step 1: Get AI Recommendations**
+- Navigate to "AI Pricing Assistant"
 - Fill in project details:
   - Client category
   - Project size & complexity
   - Duration & team size
   - Required roles
 - Click "Generate Pricing"
-- Get instant AI recommendations!
+- Review AI recommendations with detailed breakdowns
 
-### 4. **Create Your First Document** 📄
+**Step 2: Convert to Document**
+- Click the **"Convert to Invoice"** or **"Convert to Quotation"** button
+- AI feedback automatically transforms into a structured document
+- All pricing details populate the line items
+
+**Step 3: Customize & Finalize**
+- Modal opens with Edit & Preview tabs
+- Modify any line items, rates, or quantities
+- Adjust client details, discount, or VAT
+- Add/remove items as needed
+- Upload logo (optional)
+- Preview the final document
+
+**Step 4: Download**
+- Click "Download PDF"
+- Get your professional, VAT-compliant document 🎉
+
+### 4. **Or Create Documents Manually** 📄
 - Go to "Documents" page
 - Click "New Invoice" or "New Quotation"
-- A modal will open with:
-  - **Edit Details tab**: Fill in all information
-  - **Preview tab**: See exactly how it will look
-- Upload logo (optional)
-- Select client (details auto-populate!)
-- Add line items
-- Adjust discount & VAT
-- Click "Download PDF" 🎉
+- Fill in details from scratch
+- Download when ready
 
 ---
 
@@ -173,6 +208,18 @@ The app comes with a pre-configured Groq API key in `.env`:
 
 ## 📋 Features In Detail
 
+### AI-to-Document Conversion (Main Feature)
+The heart of SmartQuote is the seamless conversion from AI recommendations to editable documents:
+
+- **One-Click Conversion**: Transform AI pricing feedback into a structured invoice or quotation instantly
+- **Intelligent Mapping**: Line items, rates, quantities, and descriptions automatically populate from AI analysis
+- **Full Editability**: Every field can be modified - nothing is locked after conversion
+- **Preserve or Customize**: Keep AI suggestions as-is or adjust to your specific needs
+- **Quality Control**: Review and refine before sending to clients
+- **Professional Output**: Generate VAT-compliant PDFs ready for business use
+
+This feature bridges the gap between AI assistance and real-world business documents, giving you the best of both worlds: intelligent automation with human oversight.
+
 ### AI Pricing Assistant
 - **Automatic Analysis**: Analyzes project complexity, team composition, duration
 - **Smart Recommendations**: Suggests competitive pricing with profit margins
@@ -180,6 +227,7 @@ The app comes with a pre-configured Groq API key in `.env`:
 - **Market Insights**: Industry benchmarks and trends
 - **Confidence Score**: Shows how reliable the recommendation is
 - **Fallback**: Works even if AI is unavailable (algorithmic mode)
+- **Convert Button**: Instantly turn recommendations into editable documents
 
 ### Document Modal
 - **Two-Tab Interface**:
@@ -213,11 +261,11 @@ The app comes with a pre-configured Groq API key in `.env`:
 ## 🗂️ Navigation
 
 1. **Dashboard** - Overview & quick stats
-2. **AI Pricing Assistant** - Generate AI-powered quotes ⭐
+2. **AI Pricing Assistant** - Generate AI quotes → Convert to documents ⭐ (Main Feature)
 3. **Business Profile** - Your company details
 4. **Clients** - Client database
 5. **Rate Presets** - Hourly rates by role
-6. **Documents** - Invoices & quotations
+6. **Documents** - View, create, and manage invoices & quotations
 7. **Contact Us** - Support & info
 
 ---
