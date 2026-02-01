@@ -5,10 +5,10 @@ SmartQuote supports multiple **FREE** AI providers for intelligent pricing analy
 ## 🚀 Groq (Recommended - Fastest & Most Generous)
 
 ### Why Groq?
-- ⚡ **Fastest inference** - Get responses in < 1 second
-- 🆓 **14,400 requests/day** - More than enough for most users
-- 🧠 **Powerful models** - Llama 3.3 70B and Mixtral models
-- 💯 **100% Free** - No credit card required
+- **Fastest inference** - Get responses in < 1 second
+- **14,400 requests/day** - More than enough for most users
+- **Powerful models** - Llama 3.3 70B and Mixtral models
+- **100% Free** - No credit card required
 
 ### How to Get API Key:
 
